@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'users:user_list' %}">Users</a>
+    </li>
+    {% if select_user %}
+        <li class="breadcrumb-item active"><small><strong>EDIT:</strong></small> {{ select_user.get_full_name }}</li>
+    {% else %}
+        <li class="breadcrumb-item active">New User</li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">
+            {% if select_user %}
+                Save User
+            {% else %}
+                Create User
+            {% endif %}
+        </button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Search</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="mb-3">
+        <form method="get" action="{% url 'search' %}">
+            <div class="input-group input-group-lg">
+                <input type="text" name="q" value="{{ query_string }}" class="form-control" placeholder="Search" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th class="text-center" style="width: 50px;">#</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Equipment</th>
+            <th>Status</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in found_entries %}
+            <tr>
+                <th>
+                    <a href="{% url 'assets:edit' item.id %}">
+                        {{ item.id }}
+                    </a>
+                </th>
+                <th>
+                    <a href="{% url 'assets:edit' item.id %}">
+                        {% if item.sub_type.fa_class %}
+                            <i class="fa {{ item.sub_type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                        {% elif item.type.fa_class %}
+                            <i class="fa {{ item.type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                        {% endif %}
+                        {{ item.name }}
+                    </a>
+                    {% if item.omit_audit %}
+                        <i class="fas fa-exclamation-triangle text-warning" data-toggle="tooltip" data-placement="top"
+                           title="Asset is omitted from audit and will not show up on audit reports."></i>
+                    {% endif %}
+                </th>
+                <td>
+                    {% if not list_type %}
+                        <a href="{% url 'assets:list-type' item.type.name|lower %}">{{ item.type.name }}</a> /
+                    {% endif %}
+                    {{ item.sub_type.name }}
+                </td>
+                <td>{{ item.equipment }}</td>
+                <td>{{ item.status.name }}</td>
+                <td>{{ item.location }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="100%" class="text-center " style="padding: 25px;"> No results to list</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "pagination.html" with list=list %}
+
+{% endblock %}

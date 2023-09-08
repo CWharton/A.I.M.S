@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'assets:list' %}">Assets</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'assets:list-type' asset.type.name|lower %}">{{ asset.type.name|capfirst }}</a>
+    </li>
+    <li class="breadcrumb-item active">{{ asset.name }}</li>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form method="post" action="">
+            <nav class="navbar navbar-light bg-light border mb-2">
+                <span class="navbar-brand text-truncate col">
+                    <strong>
+                    {% if asset.sub_type.fa_class %}
+                        <i class="fa {{ asset.sub_type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                    {% elif asset.type.fa_class %}
+                        <i class="fa {{ asset.type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                    {% endif %}
+                    </strong>
+                    {{ asset.name }}
+                </span>
+                <div>
+                    <a href="{% url 'assets:edit' asset.id %}" class="btn btn-light navbar-btn">Cancel</a>
+                    <button type="submit" class="btn btn-danger navbar-btn">
+                        <span class="d-md-none d-sm-block">
+                            <i class="fa fa-save" aria-hidden="true"></i> Save
+                        </span>
+                        <span class="d-none d-md-block">
+                            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                            Trash Asset
+                        </span>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="panel-body text-capitalize">
+
+                        <table class="table table-borderless bg-light border">
+                            <tbody>
+                            <tr>
+                                <th style="width: 150px;" scope="row">Asset ID:</th>
+                                <td>
+                                    {{ asset.id }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 150px;" scope="row">{{ asset.type.name }} Type:</th>
+                                <td>{{ asset.sub_type.name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Make / Model:</th>
+                                <td>{{ asset.manufacturer.name }} {{ asset.model }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Serial #:</th>
+                                <td>{{ asset.serial }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Other Serial #:</th>
+                                <td>{{ asset.other_serial }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Inventory ID:</th>
+                                <td>{{ asset.inventory_number }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Purchased:</th>
+                                <td>{{ asset.purchased }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    {% if asset %}
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}

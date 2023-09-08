@@ -1,0 +1,8 @@
+Django
+psycopg2-binary
+gunicorn
+django-crispy-forms
+crispy_bootstrap5
+django-ipware
+pillow
+django-qr-code

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Users</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between">
+        <h2>Users</h2>
+        <div>
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'users:user_create' %}">
+                <i class="fa fa-plus" aria-hidden="true"></i> Create User
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Created</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in list %}
+            <tr>
+                <th>
+                    <a href="{% url 'users:user_edit' item.id %}">{{ item.get_full_name }}</a>
+                </th>
+                <td>{{ item.username }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.date_joined }}</td>
+            </tr>
+        {% empty %}
+            <tr class="danger">
+                <td colspan="100%" class="text-center" style="padding: 25px;">No items to list</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "pagination.html" with list=list %}
+
+{% endblock %}

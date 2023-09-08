@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'assets:status_list' %}">Asset Statuses</a></li>
+    {% if status %}
+        <li class="breadcrumb-item active">{{ status.name }}</li>
+    {% else %}
+        <li class="breadcrumb-item active">New Status</li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h2>Asset Status</h2>
+    </div>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-primary" value="Save Status">
+    </form>
+{% endblock %}

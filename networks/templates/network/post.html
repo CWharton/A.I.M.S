@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'networks:list' %}">Networks</a></li>
+    {% if network %}
+        <li class="breadcrumb-item active">{{ network.name }}</li>
+    {% else %}
+        <li class="breadcrumb-item active">New Network</li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <form method="post" action="">
+        {% csrf_token %}
+
+        <nav class="navbar navbar-light bg-light border mb-2">
+            {% if network %}
+                <span class="navbar-brand">
+                    {{ network.name }}
+                    <small>(Edit)</small>
+                </span>
+            {% else %}
+                <span class="navbar-brand">
+                    Create Network
+                </span>
+            {% endif %}
+            <div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <button type="submit" class="btn btn-primary navbar-btn">
+                            {% if network %}
+                                <i class="fa fa-save" aria-hidden="true"></i> Save Network
+                            {% else %}
+                                <i class="fa fa-plus" aria-hidden="true"></i> Create Network
+                            {% endif %}
+                        </button>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+
+        {{ form|crispy }}
+    </form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base-window.html' %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between">
+        <h2>Asset Print Queue</h2>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Asset</th>
+            <th>Created</th>
+            <th style="width: 30px"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in list %}
+            <tr>
+                <th><a href="{% url 'assets:edit' item.asset.id %}" target="aims">{{ item.asset.name }}</a></th>
+                <td>{{ item.created_by.get_full_name }} @ {{ item.created|date:"SHORT_DATE_FORMAT" }}</td>
+                <td>
+                    <a href="{% url 'assets:print-queue-delete' item.id %}">
+                        <i class="fas fa-trash-alt text-danger"></i>
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr class="danger">
+                <td colspan="100%" class="text-center " style="padding: 25px;"> No items to list</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "pagination.html" with list=list %}
+
+{% endblock %}

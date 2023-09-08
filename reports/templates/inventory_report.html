@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'reports:audit_report' %}">Reports</a>
+    </li>
+    <li class="breadcrumb-item">
+        Inventory Report
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between">
+        <h2>
+            Inventory Report <small>({{ assets.count }})</small>
+        </h2>
+        <div>
+            <button type="button" class="btn btn-primary btn-sm d-print-none" onClick="window.print()">
+                <i class="fas fa-print"></i> Print
+            </button>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Equipment</th>
+            <th scope="col">Type</th>
+            <th scope="col">Serial #</th>
+            <th scope="col">Location</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in assets %}
+            <tr>
+                <td>
+                    {% if item.sub_type.fa_class %}
+                        <i class="fa {{ item.sub_type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                    {% elif item.type.fa_class %}
+                        <i class="fa {{ item.type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                    {% endif %}
+                    {{ item.name }}
+                </td>
+                <td>{{ item.equipment }}</td>
+                <td>{{ item.sub_type.name }}</td>
+                <td>{{ item.serial }}</td>
+                <td>{{ item.location }}</td>
+                <td>{{ item.status }}</td>
+            </tr>
+        {% empty %}
+            <tr class="danger">
+                <td colspan="100%" class="text-center p-5"> No items to list</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

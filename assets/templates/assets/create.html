@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'assets:list' %}">Assets</a>
+    </li>
+    <li class="breadcrumb-item active">New Asset</li>
+{% endblock %}
+
+{% block content %}
+    <div class="">
+        <form method="post" action="">
+            <nav class="navbar navbar-light bg-light border mb-2">
+                <span class="navbar-brand">
+                    Create {{ asset_type.name }} Asset
+                </span>
+                <div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <button type="submit" class="btn btn-primary navbar-btn">
+                                <i class="fa fa-plus" aria-hidden="true"></i> Create Asset
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="row">
+                <div class="panel panel-default col-6">
+                    <div class="panel-body text-capitalize">
+
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                    </div>
+                </div>
+
+                <div class="col-6">
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

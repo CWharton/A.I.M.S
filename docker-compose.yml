@@ -1,0 +1,55 @@
+# 1. Update config values
+# 2. Set APP_ENV environment variable to proper value
+#    export APP_ENV=development
+#    set APP_ENV=development (Windows)
+# 3. Run docker-compose build
+# 4. Run docker-compose up
+# 5. Ready to Rock and Roll
+
+version: '3.5'
+
+services:
+  postgres:
+    container_name: aims-postgres
+    restart: always
+    image: postgres:10.7
+    security_opt:
+      - apparmor:unconfined
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./.docker/env/postgres.${APP_ENV}.env
+
+  aims-nginx:
+    container_name: aims-nginx
+    restart: always
+    build:
+      context: .
+      dockerfile: .docker/nginx.dockerfile
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - ./static:/var/www/public/static
+    links:
+      - aims1:aims1
+    depends_on:
+      - aims1
+    ports:
+      - "8000:80"
+
+  aims1:
+    container_name: aims-app-1
+    restart: always
+    build:
+      context: .
+      dockerfile: ./.docker/aims.dockerfile
+    security_opt:
+      - apparmor:unconfined
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    working_dir: /code
+    env_file:
+      - ./.docker/env/app.${APP_ENV}.env
+    depends_on:
+      - postgres

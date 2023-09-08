@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'reports:audit_report' %}">Reports</a>
+    </li>
+    <li class="breadcrumb-item">
+        Asset Audit
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between">
+        <h2>
+            Asset Audit Report <small>({{ assets.count }})</small>
+        </h2>
+        <div>
+            <button type="button" class="btn btn-primary btn-sm d-print-none" onClick="window.print()">
+                <i class="fas fa-print"></i> Print
+            </button>
+        </div>
+    </div>
+
+    <div class="my-3 p-2 bg-light border d-print-none">
+        <form method="get">
+          <div class="form-row align-items-center">
+            <div class="col-auto">
+              <label class="sr-only" for="date_from">date from</label>
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                      <i class="fas fa-calendar-day"></i>
+                  </div>
+                </div>
+                <input type="date" class="form-control" id="date_from" name="date_from" value="{{ date_from }}">
+              </div>
+            </div>
+            <div class="col-auto">
+              <label class="sr-only" for="date_to">date to</label>
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                      <i class="fas fa-calendar-day"></i>
+                  </div>
+                </div>
+                <input type="date" class="form-control" id="date_to" name="date_to" value="{{ date_to }}">
+              </div>
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </div>
+          </div>
+        </form>
+    </div>
+
+    <table class="table table-striped table-bordered table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Serial #</th>
+            <th scope="col">Location</th>
+            <th scope="col">Last Check-in</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in assets %}
+            <tr>
+                <td>
+                    {% if item.sub_type.fa_class %}
+                        <i class="fa {{ item.sub_type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                    {% elif item.type.fa_class %}
+                        <i class="fa {{ item.type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                    {% endif %}
+                    {{ item.name }}
+                </td>
+                <td>{{ item.serial }}</td>
+                <td>{{ item.location }}</td>
+                <td>{{ item.last_checkin|date:"SHORT_DATE_FORMAT" }}</td>
+            </tr>
+        {% empty %}
+            <tr class="danger">
+                <td colspan="100%" class="text-center p-5"> No items to list</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

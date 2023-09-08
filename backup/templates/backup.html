@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">
+        Backup
+    </li>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        Backup Data
+    </h2>
+    <a href="{% url 'backup:backup' %}" class="btn btn-primary">Backup now</a>
+{% endblock %}

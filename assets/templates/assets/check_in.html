@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block nobreadcrumb %}{% endblock %}
+
+{% block content %}
+    <div class="">
+        <form method="post" action="">
+            <nav class="p-2 bg-light border my-2 d-flex">
+                <div class="navbar-brand flex-grow-1 d-inline-block text-truncate">
+                    <strong>
+                        {% if asset.sub_type.fa_class %}
+                            <i class="fa {{ asset.sub_type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                        {% elif asset.type.fa_class %}
+                            <i class="fa {{ asset.type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                        {% endif %}
+                    </strong>
+                    {{ asset.equipment }}
+                    <small class="text-muted">[{{ asset.id }}]</small>
+
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-primary navbar-btn text-nowrap">
+                        <i class="fa fa-save" aria-hidden="true"></i> Save
+                    </button>
+                </div>
+            </nav>
+
+            <div class="row">
+                <div class="panel panel-default col-12">
+                    <div class="panel-body text-capitalize">
+                        <table class="table table-borderless bg-light border">
+                            <tbody>
+                            <tr>
+                                <th style="width: 150px" scope="row">Serial #:</th>
+                                <td>{{ asset.serial }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <div class="my-2 clearfix text-right">
+            <a class="btn btn-sm btn-outline-success pull-right"
+               href="{% url 'networks:asset_network_create' asset.id %}">
+                <i class="fa fa-plus" aria-hidden="true"></i> Attach network
+            </a>
+            <button type="button" class="btn btn-sm btn-outline-info" data-toggle="collapse"
+                    data-target="#collapseMore"
+                    aria-expanded="false" aria-controls="collapseMore">
+                More...
+            </button>
+        </div>
+
+        <div class="list-group collapse mb-3" id="collapseMore">
+            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal"
+                    data-target="#noteModal">
+                <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; New Note
+            </button>
+            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal"
+                    data-target="#printQueueModal">
+                <i class="fas fa-print" aria-hidden="true"></i> &nbsp; Add to print queue
+            </button>
+            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal"
+                    data-target="#shelfAssetModal">
+                <i class="fas fa-broom" aria-hidden="true"></i> &nbsp; Shelf this Asset
+            </button>
+            <a href="{% url 'assets:edit' asset.id %}" class="list-group-item list-group-item-action list-group-item-info">
+                {% if asset.sub_type.fa_class %}
+                    <i class="fa {{ asset.sub_type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                {% elif asset.type.fa_class %}
+                    <i class="fa {{ asset.type.fa_class }}" aria-hidden="true"></i>&nbsp;
+                {% endif %}
+                &nbsp; View asset record
+            </a>
+        </div>
+
+        <table class="table table-striped border">
+            <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Network</th>
+                <th>IP Address</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in networks %}
+                <tr>
+                    <th>
+                        <a href="{% url 'networks:asset_network_edit' item.id %}">{{ item.name }}</a>
+                    </th>
+                    <td>{{ item.network.name }}</td>
+                    <td>{{ item.ipv4_address }}</td>
+                </tr>
+            {% empty %}
+                <tr></tr>
+                <tr>
+                    <td colspan="100%" class="text-center p-4">
+                        <code>No networks assigned</code>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="note`" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'assets:note_create' asset.id %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Asset Note</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_note | crispy }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Queue Modal -->
+    <div class="modal fade" id="printQueueModal" tabindex="-1" role="dialog" aria-labelledby="print`"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Print Queue</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Added this asset to my print queue for easy label printing.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="{% url 'assets:print-queue' asset.id %}" class="btn btn-primary">Add to Queue</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shelve for IT Modal -->
+    <div class="modal fade" id="shelfAssetModal" tabindex="-1" role="dialog" aria-labelledby="shelf`"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Shelf for I.T.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to shelf this asset? Doing so will update status to
+                    <code>'Shelved'</code>, clear out the
+                    IP address, and change location to <code>'I.T. Office'</code>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="{% url 'assets:shelf' asset.id %}" class="btn btn-primary">Shelf this Asset</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

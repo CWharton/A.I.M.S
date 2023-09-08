@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Networks</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between">
+        <h2>Networks</h2>
+        <div>
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'networks:create' %}">
+                <i class="fa fa-plus" aria-hidden="true"></i> Create Network
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>IP Address</th>
+            <th>Assigned To</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in list %}
+            <tr>
+                <td><a href="{% url 'networks:edit' item.id %}">{{ item.name }}</a></td>
+                <td>{{ item.ipv4_address }}</td>
+                <td><a href="{% url 'assets:edit' item.assigned_on.id %}">{{ item.assigned_on.name }}</a></td>
+            </tr>
+        {% empty %}
+            <tr class="danger">
+                <td colspan="100%" class="text-center " style="padding: 25px;"> No items to list</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "pagination.html" with list=list %}
+
+{% endblock %}

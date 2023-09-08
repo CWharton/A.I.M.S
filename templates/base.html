@@ -1,0 +1,193 @@
+{% load static %}
+{% load gravatar_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>A.I.M.S. - Atlas Inventory Management System</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+
+{% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark fixed-top px-3">
+        <a class="navbar-brand" href="{% url 'dashboard' %}">A.I.M.S.</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Assets
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'assets:create' %}">New Asset</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'assets:list' %}">All Assets</a>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header">Assets by Types</div>
+                        {% for item in request.asset_types %}
+                            <a class="dropdown-item"
+                               href="{% url 'assets:list-type' item.name|lower %}">{{ item.name }}</a>
+                        {% endfor %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'software:list' %}">Software</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Network
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'networks:list' %}">List Networks</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'reports:audit_report' %}">Asset Audit Report</a>
+                        <a class="dropdown-item" href="{% url 'reports:subnet_ip_report' %}">Subnet IP Report</a>
+                        <a class="dropdown-item" href="{% url 'reports:inventory_report' %}">Inventory Report</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item"
+                           onclick="window.open('{% url 'assets:print-queue-list' %}', 'aims-queue', popWinFeatures + ',width=800px');">
+                            Asset Print Queue
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Administration
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'users:user_list' %}">Users</a>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header">Dropdown</div>
+                        <a class="dropdown-item" href="{% url 'assets:manufacturer_list' %}">Manufacturers</a>
+                        <a class="dropdown-item" href="{% url 'assets:status_list' %}">Asset Status List</a>
+                        <a class="dropdown-item" href="{% url 'assets:type_list' %}">Asset Types</a>
+                        <a class="dropdown-item" href="{% url 'assets:subtype_list' %}">Asset Sub-Types</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'backup:view' %}">Backup &amp; Restore</a>
+                    </div>
+                </li>
+            </ul>
+
+            <form method="get" action="{% url 'search' %}" class="form-inline my-2 my-lg-0">
+                <div class="input-group">
+                    <input name="q" class="form-control bg-dark border border-primary text-light" type="search"
+                           placeholder="Search" aria-label="Search" data-toggle="tooltip" data-placement="bottom"
+                           title="Search assets by: Name, serial, manufacturer, model, location, or ip address">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary my-2 my-sm-0 input-group-append input-group-button"
+                                type="submit">
+                            <i class="fas fa-search mt-1" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <ul class="navbar-nav pull-end ps-2">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle p-0 " data-bs-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        {{ user.email | gravatar:30 }} &nbsp; {{ user.username }}<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endif %}
+
+<div class="container">
+
+    {% block nobreadcrumb %}
+        <ol class="breadcrumb-nav breadcrumb d-print-none">
+            {% block breadcrumb %}
+            {% endblock %}
+        </ol>
+    {% endblock %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Error!
+                    </strong>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% else %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    <strong>
+                        <i class="fas fa-check-circle"></i>
+                        Success!
+                    </strong>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="clearfix">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="footer text-center">
+        Atlas Inventory Management System &copy; {% now "Y" %}
+    </div>
+</div><!-- /.container -->
+<script type="text/javascript">
+    window.name = 'aims';
+    var popWinFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="{% static 'js/global.js' %}"></script>
+{% block script %}
+{% endblock %}
+</body>
+</html>

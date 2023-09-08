@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'assets:subtype_list' %}">Asset Sub-Types</a></li>
+    {% if subtype %}
+        <li class="breadcrumb-item active">{{ subtype.name }}</li>
+    {% else %}
+        <li class="breadcrumb-item active">New Asset Sub-Type</li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h2>Asset Sub-Type</h2>
+    </div>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-primary" value="Save Asset Sub-Type">
+    </form>
+{% endblock %}

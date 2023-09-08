@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Manufacturers</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between">
+        <h2>Manufacturers</h2>
+        <div>
+            <a class="btn btn-sm btn-outline-success" href="{% url 'assets:manufacturer_create' %}">
+                <i class="fa fa-plus" aria-hidden="true"></i> Add Manufacturer
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Modified</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in list %}
+            <tr>
+                <th><a href="{% url 'assets:manufacturer_edit' item.id %}">{{ item.name }}</a></th>
+                <td>{{ item.created_by.get_full_name }} @ {{ item.created }}</td>
+                <td>{{ item.modified_by.get_full_name }} @ {{ item.modified }}</td>
+            </tr>
+        {% empty %}
+            <tr class="danger">
+                <td colspan="100%" class="text-center " style="padding: 25px;"> No items to list</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "pagination.html" with list=list %}
+
+{% endblock %}
