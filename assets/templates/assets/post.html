@@ -21,13 +21,13 @@
 {% block content %}
     {% if asset.omit_audit %}
         <div class="alert alert-warning" role="alert">
-            <i class="fas fa-exclamation-triangle text-warning mr-1"></i>
+            <i class="fas fa-exclamation-triangle text-warning me-1"></i>
             Asset is omitted from audit and will not show up on audit reports!
         </div>
     {% endif %}
     <div>
         <form method="post" action="">
-            <nav class="navbar navbar-light bg-light border mb-2">
+            <nav class="navbar navbar-light bg-light border mb-2 px-3">
                 {% if asset %}
                     <span class="navbar-brand text-truncate col">
                         <strong>
@@ -49,11 +49,11 @@
                     <div>
                         {% if asset %}
                         <div class="btn-group navbar-btn d-none d-md-inline-block">
-                            <button type="button" class="btn btn-light border" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-light border" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bars"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item" data-toggle="modal" data-target="#printQueueModal">
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#printQueueModal">
                                     <i class="fas fa-print"></i> &nbsp; Add to print queue
                                 </button>
                                 <div class="dropdown-divider"></div>
@@ -102,9 +102,9 @@
                                 <td>
                                     {{ asset.id }}
                                     {% if not asset.decommissioned %}
-                                    <span class="float-right">
-                                        <button type="button" class="btn btn-secondary btn-sm ml-2" data-toggle="modal"
-                                                data-target="#editModal">
+                                    <span class="float-end">
+                                        <button type="button" class="btn btn-secondary btn-sm ms-2" data-bs-toggle="modal"
+                                                data-bs-target="#editModal">
                                           Edit
                                         </button>
                                     </span>
@@ -136,7 +136,7 @@
                                 <td>
                                     {{ asset.purchased }}
                                     {% if asset.purchased_price %}
-                                        <small class="text-muted ml-2">(${{ asset.purchased_price }})</small>
+                                        <small class="text-muted ms-2">(${{ asset.purchased_price }})</small>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -164,7 +164,7 @@
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" id="assetTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="asset-network" data-toggle="tab" href="#network"
+                                <a class="nav-link active" id="asset-network" data-bs-toggle="tab" href="#network"
                                    role="tab" aria-controls="network"
                                    aria-selected="true" title="Network">
                                     <i class="fas fa-network-wired"></i> <span
@@ -172,7 +172,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="asset-connections" data-toggle="tab" href="#connections"
+                                <a class="nav-link" id="asset-connections" data-bs-toggle="tab" href="#connections"
                                    role="tab" aria-controls="Connected devices"
                                    aria-selected="false" title="Connections">
                                     <i class="fas fa-link"></i> <span
@@ -180,7 +180,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="asset-licenses" data-toggle="tab" href="#licenses" role="tab"
+                                <a class="nav-link" id="asset-licenses" data-bs-toggle="tab" href="#licenses" role="tab"
                                    aria-controls="Licenses"
                                    aria-selected="false" title="Software licenses">
                                     <i class="fas fa-certificate"></i> <span
@@ -188,7 +188,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="asset-notes" data-toggle="tab" href="#note" role="tab"
+                                <a class="nav-link" id="asset-notes" data-bs-toggle="tab" href="#note" role="tab"
                                    aria-controls="note" aria-selected="true"
                                    title="Notes">
                                     <i class="far fa-sticky-note"></i> <span
@@ -196,7 +196,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="asset-log" data-toggle="tab" href="#log" role="tab"
+                                <a class="nav-link" id="asset-log" data-bs-toggle="tab" href="#log" role="tab"
                                    aria-controls="log" aria-selected="true"
                                    title="Change Log">
                                     <i class="fas fa-clipboard-list"></i>
@@ -292,8 +292,8 @@
                             <div class="tab-pane fade" id="licenses" role="tabpanel" aria-labelledby="licenses-tab">
                                 {% if not asset.decommissioned %}
                                 <div class="my-2 clearfix text-right">
-                                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal"
-                                            data-target="#licenseModal">
+                                    <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                                            data-bs-target="#licenseModal">
                                         <i class="fa fa-plus" aria-hidden="true"></i> New software licenses
                                     </button>
                                 </div>
@@ -336,8 +336,8 @@
                             <div class="tab-pane fade" id="note" role="tabpanel" aria-labelledby="note-tab">
                                 {% if not asset.decommissioned %}
                                 <div class="my-2 clearfix text-right">
-                                    <button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal"
-                                            data-target="#noteModal">
+                                    <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                                            data-bs-target="#noteModal">
                                         <i class="fa fa-plus" aria-hidden="true"></i> New Note
                                     </button>
                                 </div>
