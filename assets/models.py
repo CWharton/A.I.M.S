@@ -5,8 +5,6 @@ from django.db import models
 
 
 # Current status of a asset
-from django.utils.datetime_safe import date
-
 
 class Status(models.Model):
     name = models.CharField(max_length=255)
@@ -113,7 +111,7 @@ class Asset(models.Model):
     @property
     def last_checkin_status(self):
         item = self.check_in.latest('created').created.date()
-        set_time = date.today() - datetime.timedelta(days=90)
+        set_time = datetime.date.today() - datetime.timedelta(days=90)
         return set_time < item
 
     def __str__(self):
