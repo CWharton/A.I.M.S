@@ -1,3 +1,6 @@
+from crispy_bootstrap5.bootstrap5 import FloatingField
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
 from django import forms
 
 from assets.models import Asset, Status, Manufacturer, Type, SubType, Note
@@ -16,6 +19,10 @@ class AssetCreateForm(forms.ModelForm):
         super(AssetCreateForm, self).__init__(*args, **kwargs)
         self.fields["sub_type"].label = list_type + ' Type'
         self.fields["sub_type"].queryset = SubType.objects.filter(type__name__iexact=list_type)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            FloatingField("name")
+        )
 
     class Meta:
         model = Asset
@@ -45,6 +52,10 @@ class AssetSafeForm(forms.ModelForm):
         super(AssetSafeForm, self).__init__(*args, **kwargs)
         self.fields["sub_type"].label = list_type + ' Type'
         self.fields["sub_type"].queryset = SubType.objects.filter(type__name__iexact=list_type)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            FloatingField("other_serial"),
+        )
 
     class Meta:
         model = Asset
@@ -68,6 +79,13 @@ class AssetSafeForm(forms.ModelForm):
 
 
 class AssetChangeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            FloatingField("name"),
+        )
+
     class Meta:
         model = Asset
         fields = ['name', 'status', 'station_id', 'location', 'comment']

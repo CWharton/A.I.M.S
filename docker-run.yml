@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: n0TAnotherL0n9Passw0rd!
+    ports:
+      - "32774:5432"
+    volumes:
+      - /volume1/db_storage/postgres:/var/lib/postgresql/data
+
+  aims:
+    image: automax/aims
+    restart: always
+    environment:
+      SECRET_KEY: "!f!_09(rpz8sr9xx=yd@mh*lj+5iqk3%6k)8r&6gm#okuy@j"
+      DJANGO_DEBUG: false
+      APP_URL: http://aims.killeenauto.local
+    volumes:
+      - /volume1/web/aims:/code
+    working_dir: /code
+    ports:
+      - "8971:8000"
+    links:
+      - db:postgres
+    depends_on:
+      - db
+
+  aims-nginx:
+    image: nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - /volume1/web/aims/static:/var/www/public/static
+      - /volume1/web/aims/.docker/config/nginx.conf:/etc/nginx/nginx.conf:ro
+    links:
+      - aims:aims1
+    depends_on:
+      - aims
