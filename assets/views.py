@@ -159,9 +159,10 @@ def shelf(request, asset_id=None):
 @login_required
 def asset_list(request, list_type=None):
     if list_type is None:
-        queryset = Asset.objects.all().order_by('name')
+        queryset = Asset.objects.exclude(decommissioned__isnull=True).all().order_by('name')
     else:
-        queryset = Asset.objects.filter(type__name__iexact=list_type).all().order_by('name')
+        queryset = Asset.objects.filter(type__name__iexact=list_type).exclude(
+            decommissioned__isnull=True).all().order_by('name')
 
     paginator = Paginator(queryset, 25)
     page = request.GET.get('page')
