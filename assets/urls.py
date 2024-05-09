@@ -34,4 +34,6 @@ urlpatterns = [
     path('<int:asset_id>/print-queue/', views.print_queue, name='print-queue'),
     path('<int:asset_id>/shelf/', views.shelf, name='shelf'),
     path('<int:asset_id>/trash/', views.asset_delete, name='trash'),
+
+    path('<int:asset_id>/notes/', views.asset_notes, name='asset_notes'),
 ]
