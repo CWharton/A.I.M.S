@@ -54,24 +54,24 @@
                href="{% url 'networks:asset_network_create' asset.id %}">
                 <i class="fa fa-plus" aria-hidden="true"></i> Attach network
             </a>
-            <button type="button" class="btn btn-sm btn-outline-info" data-toggle="collapse"
-                    data-target="#collapseMore"
+            <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="collapse"
+                    data-bs-target="#collapseMore"
                     aria-expanded="false" aria-controls="collapseMore">
                 More...
             </button>
         </div>
 
         <div class="list-group collapse mb-3" id="collapseMore">
-            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal"
-                    data-target="#noteModal">
+            <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="modal"
+                    data-bs-target="#noteModal">
                 <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; New Note
             </button>
-            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal"
-                    data-target="#printQueueModal">
+            <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="modal"
+                    data-bs-target="#printQueueModal">
                 <i class="fas fa-print" aria-hidden="true"></i> &nbsp; Add to print queue
             </button>
-            <button type="button" class="list-group-item list-group-item-action" data-toggle="modal"
-                    data-target="#shelfAssetModal">
+            <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="modal"
+                    data-bs-target="#shelfAssetModal">
                 <i class="fas fa-broom" aria-hidden="true"></i> &nbsp; Shelf this Asset
             </button>
             <a href="{% url 'assets:edit' asset.id %}" class="list-group-item list-group-item-action list-group-item-info">
@@ -122,7 +122,7 @@
                     {% csrf_token %}
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Asset Note</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -130,7 +130,7 @@
                         {{ form_note | crispy }}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Post</button>
                     </div>
                 </form>
@@ -145,7 +145,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Print Queue</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -153,7 +153,7 @@
                     Added this asset to my print queue for easy label printing.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <a href="{% url 'assets:print-queue' asset.id %}" class="btn btn-primary">Add to Queue</a>
                 </div>
             </div>
@@ -167,7 +167,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Shelf for I.T.</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -177,7 +177,7 @@
                     IP address, and change location to <code>'I.T. Office'</code>.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <a href="{% url 'assets:shelf' asset.id %}" class="btn btn-primary">Shelf this Asset</a>
                 </div>
             </div>
