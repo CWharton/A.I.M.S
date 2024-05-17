@@ -139,6 +139,13 @@ def asset_check_in(request, asset_id=None):
 
 
 @login_required
+def asset_notes(request, asset_id):
+    asset = get_object_or_404(Asset, pk=asset_id)
+
+    return render(request, 'assets/notes.html', {'asset': asset})
+
+
+@login_required
 def shelf(request, asset_id=None):
     asset = get_object_or_404(Asset, pk=asset_id)
     status = get_object_or_404(Status, pk=2)
