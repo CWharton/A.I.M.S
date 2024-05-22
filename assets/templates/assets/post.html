@@ -445,9 +445,11 @@
                     {% endif %}
             </div>
 
+            {% comment %} 
             <div hx-get="{% url 'assets:asset_notes' asset.id %}" hx-trigger="load">
                 <img alt="Result loading..." class="htmx-indicator" width="150" src="/img/bars.svg"/>
-            </div>
+            </div> 
+            {% endcomment %}
 
             <!-- Form Modal -->
             <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"

@@ -166,7 +166,7 @@ def shelf(request, asset_id=None):
 @login_required
 def asset_list(request, list_type=None):
     if list_type is None:
-        queryset = Asset.objects.exclude(decommissioned__isnull=False).all().order_by('name')
+        queryset = Asset.objects.exclude(decommissioned__isnull=False).all() .order_by('-modified')
     else:
         queryset = Asset.objects.filter(type__name__iexact=list_type).exclude(
             decommissioned__isnull=False).all().order_by('name')
